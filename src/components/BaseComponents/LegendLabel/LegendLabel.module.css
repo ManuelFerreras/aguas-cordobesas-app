@@ -1,0 +1,16 @@
+.legendLabel {
+  font-family: 'Nunito Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  text-transform: capitalize;
+  margin: 0;
+}
+
+.legendLabel.primary {
+  color: rgba(37, 37, 37, 0.6);
+}
+
+.legendLabel.secondary {
+  color: rgba(37, 37, 37);
+}

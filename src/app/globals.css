@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;700&display=swap');
+
+:root {
+  --primary-bg-color: #252422;
+  --secondary-bg-color: #403d39;
+  --details-color: #eb5e28;
+  --primary-font-color: #ffffff;
+  --secondary-font-color: #252525;
+  --alert-color-success: #42911b;
+  --alert-color-warning: #f6ae2d;
+  --alert-color-error: #b92620;
+}
+
+body {
+  background-color: var(--primary-bg-color);
+}

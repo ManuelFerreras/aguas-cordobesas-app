@@ -1,0 +1,28 @@
+.button {
+  border-radius: 12px;
+  border: none;
+  font-family: 'Nunito Sans', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--primary-font-color);
+  padding: 6px 0;
+  height: 36px;
+  min-width: 100px;
+  cursor: pointer;
+}
+
+.button.primary {
+  background-color: var(--alert-color-success);
+}
+
+.button.secondary {
+  background-color: var(--alert-color-error);
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
