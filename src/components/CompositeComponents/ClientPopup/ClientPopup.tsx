@@ -20,9 +20,7 @@ const ClientPopup: React.FC<ClientPopupProps> = ({ onClose, onClientAdded }) => 
         const clientId = clientIdInputRef.current?.value
         if (!clientId) return
 
-        console.log(clientId)
-
-        const response = await fetch(baseClientsUrl, {
+        const response = await fetch(`${baseClientsUrl}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -30,7 +28,7 @@ const ClientPopup: React.FC<ClientPopupProps> = ({ onClose, onClientAdded }) => 
             body: JSON.stringify({ agId: clientId })
         })
 
-        if (response.ok) {
+        if (response.status === 200) {
             onClientAdded()
         }
 

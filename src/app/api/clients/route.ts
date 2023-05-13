@@ -29,3 +29,21 @@ export async function GET() {
     const getResult = await ClientModel.find({})
     return NextResponse.json({ clients: getResult})
 }
+
+export async function DELETE(req: NextRequest) {
+    console.log('DELETE')
+
+    const { searchParams } = new URL(req.url)
+
+    const agId = searchParams.get('agId')
+    console.log('agId', agId)
+
+    if(!agId) return NextResponse.json({ error: 'No agId' }, { status: 400 })
+    if(isNaN(Number(agId))) return NextResponse.json({ error: 'agId must be a number' }, { status: 400 })
+    if (Number(agId) <= 0) return NextResponse.json({ error: 'agId must be greater than 0' }, { status: 400 })
+
+    await dbConnect()
+
+    const clientDelete = await ClientModel.findOneAndDelete({ agId: agId })
+    return NextResponse.json({ clientDelete }, { status: 200 }) 
+}

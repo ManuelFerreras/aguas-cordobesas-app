@@ -7,6 +7,12 @@ import ClientPopup from "@/components/CompositeComponents/ClientPopup/ClientPopu
 import { Client } from "@/common/Types";
 import { baseClientsUrl } from "@/lib/constants/urls";
 
+async function getTime() {
+    const response = await fetch('http://worldtimeapi.org/api/timezone/America/Argentina/Cordoba', { next: { revalidate: 10 } })
+    const data = await response.json()
+    console.log(data)
+}
+
 const DashboardPage: FC = () => {
     const [showingClientsPopup, setShowingClientsPopup] = useState<boolean>(false)
     const [clients, setClients] = useState<Client[]>([])
@@ -15,8 +21,14 @@ const DashboardPage: FC = () => {
         setShowingClientsPopup(!showingClientsPopup)
     }
 
+    const timeResponse = getTime()
+
     const fetchClients = async () => {
-        const response = await fetch(baseClientsUrl)
+        const response = await fetch(baseClientsUrl, {
+            next: {
+                revalidate: 60
+            }
+        })
         const data = await response.json()
 
         if(!data?.clients) return

@@ -14,18 +14,24 @@ interface ClientCardProps {
 }
 
 const ClientCard: FC<ClientCardProps> = ({ client, variant, onClientRemoved }) => {
-  const deleteClient = () => {
+  const deleteClient = async () => {
     const deleteClientId = client?.agId
     console.log('deleteClientId', deleteClientId)
 
-    const result = fetch(`${baseClientsUrl}/${deleteClientId}`, {
+    const urlParams = new URLSearchParams({
+      agId: deleteClientId.toString()
+    })
+
+    const result = await fetch(`${baseClientsUrl}?${urlParams}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       }
     })
 
-    onClientRemoved()
+    if(result.status === 200) {
+      onClientRemoved()
+    }
   }
 
   return (
