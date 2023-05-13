@@ -1,16 +1,8 @@
-import { clients } from '@/common/hardocde'
-
-import ClientsTable from '@/components/CompositeComponents/ClientsTable/ClientsTable'
-import Header from '@/components/CompositeComponents/Header/Header'
-
-import styles from './page.module.css'
+import React from 'react'
+import DashboardPage from '@/components/PageComponents/DashboardPage/DashboardPage'
 
 export default function Home() {
   return (
-    <main className={styles.main}>
-      <Header username='User' welcomeMessage='Welcome' />
-
-      <ClientsTable clientsData={clients} />
-    </main>
+    <DashboardPage />
   )
 }

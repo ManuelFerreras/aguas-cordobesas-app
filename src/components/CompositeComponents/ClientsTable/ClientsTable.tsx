@@ -9,20 +9,23 @@ import ClientCard from '../ClientCard/ClientCard'
 import styles from './ClientsTable.module.css'
 
 interface ClientsTableProps {
-  clientsData: Client[]
+  clientsData: Client[],
+  onAddButtonClick: () => void,
+  onClientRemoved: () => void
 }
 
-const ClientsTable: FC<ClientsTableProps> = ({ clientsData }) => {
+const ClientsTable: FC<ClientsTableProps> = ({ clientsData, onAddButtonClick, onClientRemoved }) => {
   return (
     <>
       <h1 className={`${styles.clientsTableTitle}`}>Clients in DB</h1>
 
       <div className={`${styles.clientsTable}`}>
-        {clientsData.map((client, index) => {
+        {clientsData?.map((client, index) => {
           return (
             <ClientCard
               key={index}
               client={client}
+              onClientRemoved={onClientRemoved}
               variant={
                 index % 2 === 0 ? VariantEnum.primary : VariantEnum.secondary
               }
@@ -30,7 +33,7 @@ const ClientsTable: FC<ClientsTableProps> = ({ clientsData }) => {
           )
         })}
 
-        <IconButton>
+        <IconButton onClick={onAddButtonClick} >
           <Image
             src={'img/icon/addIcon.svg'}
             width={24}

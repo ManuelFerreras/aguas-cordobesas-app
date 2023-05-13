@@ -12,6 +12,7 @@
   height: 36px;
   min-width: 100px;
   cursor: pointer;
+  line-height: 24px;
 }
 
 .button.primary {
