@@ -51,3 +51,4 @@ const ClientPopup: React.FC<ClientPopupProps> = ({ onClose, onClientAdded }) => 
 }
 
 export default ClientPopup
+export type { ClientPopupProps }
