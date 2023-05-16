@@ -1,6 +1,6 @@
 import { Schema, model, models } from 'mongoose'
 
-interface Client {
+export interface ClientInterface {
     name?: string
     agId: number
     ultimaDeuda?: string
@@ -8,13 +8,12 @@ interface Client {
     vtoUltimoPeriodo?: string
 }
 
-const ClientSchema = new Schema<Client>({
+const ClientSchema = new Schema<ClientInterface>({
     name: { type: String },
     agId: { type: Number, required: true},
     ultimaDeuda: { type: String },
     utlimoPeriodo: { type: String },
     vtoUltimoPeriodo: { type: String }
-    
 })
 
-export const ClientModel = models.Client || model<Client>('Client', ClientSchema)
+export const ClientModel = models.Client || model<ClientInterface>('Client', ClientSchema)
