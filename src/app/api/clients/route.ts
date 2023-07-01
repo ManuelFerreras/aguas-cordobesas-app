@@ -14,10 +14,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
     if(isNaN(Number(newClientId))) return NextResponse.json({ error: 'agId must be a number' }, { status: 400 })
     if (newClientId <= 0) return NextResponse.json({ error: 'agId must be greater than 0' }, { status: 400 })
 
-    const clientToUpload = new ClientModel({
-        agId: newClientId
-    })
-    await clientToUpload.save()
+    // if client doesnt exist in db, add it.
+    const clientExists = await ClientModel.findOne({ agId: newClientId })
+    let clientToUpload = null
+    if (!clientExists) {
+        const newClient = new ClientModel({
+            agId: newClientId
+        })
+        await newClient.save()
+    }
 
     return NextResponse.json({ clientToUpload }, { status: 200 }) 
 }

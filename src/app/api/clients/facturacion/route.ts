@@ -7,6 +7,7 @@ export const POST = async (req: NextRequest) => {
     console.log('POST')
     const reqBody = await req.json()
 
+    console.debug('reqBody', reqBody)
     const { agIds }: { agIds: number[] } = reqBody
 
     if (!agIds) return NextResponse.json({ error: 'No agIds' }, { status: 400 })

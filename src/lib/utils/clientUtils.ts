@@ -47,14 +47,14 @@ export const getClientFacturas = async (agId: Number, token: string) => {
     };
 
     const reqResult = await fetch("https://www.aguascordobesas.com.ar/espacioClientes/recursos/includesActions/inc_gestionDeuda.php", requestOptions)
-    const reqResultJson = await reqResult.text()
+    const reqResultJson = await reqResult.json()
     
     return reqResultJson
 }
 
 export const extractDataFromFactura = async (factura: any, agId: number) => {
     const reqFacturaHTML = factura?.data?.datosHtmlDeuda
-    const facturaDoc = new jsdom.JSDOM(String(reqFacturaHTML)).window.document
+    const facturaDoc = new jsdom.JSDOM(reqFacturaHTML).window.document
 
     const elemsPeriodo = facturaDoc.querySelectorAll('td[data-title="Periodo"]');
     const elemsImporte = facturaDoc.querySelectorAll('td[data-title="Importe $"]');
@@ -71,15 +71,18 @@ export const extractDataFromFactura = async (factura: any, agId: number) => {
     })
 
     const facturasNoVencidas = combinedElems.filter((elem) => {
-        return elem.vencimiento?.includes('No Vencido')
+        return elem.estado?.includes('No Vencido')
     })
 
     const facturasVencidas = combinedElems.filter((elem) => {
-        return elem.vencimiento?.includes('Vencido')
+        return elem.estado?.includes('Vencido')
     })
 
+    console.debug(factura?.data?.cliente)
+    console.debug(factura)
+
     const newClient: ClientInterface = {
-        name: factura?.data?.client,
+        name: factura?.data?.cliente,
         agId: agId
     }
 
@@ -97,11 +100,21 @@ export const extractDataFromFactura = async (factura: any, agId: number) => {
         newClient.utlimoPeriodo = 'No hay deuda'
     }
 
-    await addClientToDB(newClient)
+    await addOrUpdateClientToDB(newClient)
     return newClient
 }
 
-export const addClientToDB = async (client: ClientInterface) => {
-    const newClient = new ClientModel(client)
-    await newClient.save()
+export const addOrUpdateClientToDB = async (client: ClientInterface) => {
+    const clientDoc = await ClientModel.findOne({ agId: client.agId })
+
+    if (clientDoc) {
+        clientDoc.name = client.name
+        clientDoc.ultimaDeuda = client.ultimaDeuda
+        clientDoc.vtoUltimoPeriodo = client.vtoUltimoPeriodo
+        clientDoc.utlimoPeriodo = client.utlimoPeriodo
+        await clientDoc.save()
+    } else {
+        const newClient = new ClientModel(client)
+        await newClient.save()
+    }
 }

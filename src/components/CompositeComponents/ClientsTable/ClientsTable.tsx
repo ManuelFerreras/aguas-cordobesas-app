@@ -7,6 +7,7 @@ import IconButton from '@/components/BaseComponents/IconButton/IconButton'
 
 import ClientCard from '../ClientCard/ClientCard'
 import styles from './ClientsTable.module.css'
+import { baseClientsUrl } from '@/lib/constants/urls'
 
 interface ClientsTableProps {
   clientsData: Client[],
@@ -15,6 +16,22 @@ interface ClientsTableProps {
 }
 
 const ClientsTable: FC<ClientsTableProps> = ({ clientsData, onAddButtonClick, onClientRemoved }) => {
+  const runAll = async () => {
+    const agIds = clientsData.map(client => client.agId.toString())
+
+    const result = await fetch(`${baseClientsUrl}/facturacion`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ agIds })
+    })
+
+    if(result.status === 200) {
+      onClientRemoved()
+    }
+  }
+
   return (
     <>
       <h1 className={`${styles.clientsTableTitle}`}>Clients in DB</h1>
@@ -25,6 +42,7 @@ const ClientsTable: FC<ClientsTableProps> = ({ clientsData, onAddButtonClick, on
             <ClientCard
               key={index}
               client={client}
+              index={index + 1}
               onClientRemoved={onClientRemoved}
               variant={
                 index % 2 === 0 ? VariantEnum.primary : VariantEnum.secondary
@@ -43,7 +61,7 @@ const ClientsTable: FC<ClientsTableProps> = ({ clientsData, onAddButtonClick, on
         </IconButton>
 
         <div>
-          <Button variant={VariantEnum.primary}>Run All</Button>
+          <Button onClick={runAll} variant={VariantEnum.primary}>Run All</Button>
         </div>
       </div>
     </>
